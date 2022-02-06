@@ -3,5 +3,6 @@
     <string name="wlcm">WELCOME TO LINKLET!!</string>
     <string name ="u_name">Enter your username here:- </string>
     <string name="pass">Enter your password here:- </string>
+    <string name="sub_btn">SUBMIT</string>
 
 </resources>
