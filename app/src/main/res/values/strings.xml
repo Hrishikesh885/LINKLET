@@ -4,5 +4,6 @@
     <string name="u_name">Enter your username here:- </string>
     <string name="pass">Enter your password here:- </string>
     <string name="sub_btn">SUBMIT</string>
+    <string name="no_file">NO FILES DETECTED</string>
 
 </resources>
