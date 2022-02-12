@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -15,8 +16,10 @@ import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.File;
 
+public class MainActivity extends AppCompatActivity {
+    String FolderName,file;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +30,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(checkPermission()){
                     // for permission allowed
+                    FolderName="test";
+                    createDirectory("Linklet","Personal").getPath();
                     Intent intent=new Intent(MainActivity.this, file_activity.class);
-                    String path= Environment.getExternalStorageDirectory().getPath();
+                    String path=Environment.getExternalStorageDirectory()+"/Android/"+"data/"+"com.example.linklet/"+"files/";
+                    Uri uri = Uri.parse(path);
+                    intent.setDataAndType(uri,"*/*");
+
                             intent.putExtra("path",path);
                             startActivity(intent);
                 }
@@ -39,6 +47,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private File createDirectory(String dirName, String subDir) {
+        File file;
+        if(subDir!=null){
+            file = new File(getExternalFilesDir(null)+"/"+dirName+"/"+subDir);
+        }
+        else{
+            file=new File(getExternalFilesDir(null)+"/"+dirName);
+        }
+        if(!file.exists()){
+            file.mkdir();
+        }
+        return file;
+    }
+
+
     private boolean checkPermission(){
         int result=ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if(result== PackageManager.PERMISSION_GRANTED){
@@ -54,4 +78,5 @@ public class MainActivity extends AppCompatActivity {
         else
         ActivityCompat.requestPermissions(MainActivity.this,new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},111);
     }
+
 }

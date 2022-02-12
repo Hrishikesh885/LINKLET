@@ -1,11 +1,18 @@
 package com.example.linklet;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,6 +47,54 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         else{
             holder.imageView.setImageResource(R.drawable.ic_baseline_insert_drive_file_24);
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(selectedFile.isDirectory()){
+                    Intent intent=new Intent(context,file_activity.class);
+                    String path=selectedFile.getAbsolutePath();
+                    intent.putExtra("path",path);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+                else {
+                    try {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        String type = "*/*";
+                        intent.setDataAndType(Uri.parse(selectedFile.getAbsolutePath()), type);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }catch (Exception e){
+                        Toast.makeText(context.getApplicationContext(),"Can not open file",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(context,v);
+                popupMenu.getMenu().add("DELETE");
+
+                popupMenu.getMenu().add("RENAME");
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        if(menuItem.getTitle().equals("DELETE")){
+                            boolean deleted=selectedFile.delete();
+
+                        }
+
+                        if(menuItem.getTitle().equals("RENAME")){
+
+                        }
+                        return true;
+                    }
+                });
+                return true;
+            }
+        });
 
     }
 

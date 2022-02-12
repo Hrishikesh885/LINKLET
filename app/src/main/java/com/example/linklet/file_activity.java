@@ -18,6 +18,7 @@ public class file_activity extends AppCompatActivity {
         setContentView(R.layout.activity_file);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         TextView noFilesText= findViewById(R.id.nofiles_textview);
+
         String path=getIntent().getStringExtra("path");
         File root= new File(path);
         File[] filesAndFolders = root.listFiles();
